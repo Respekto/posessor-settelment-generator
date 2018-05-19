@@ -1,0 +1,19 @@
+language: java
+
+
+#for docker
+sudo: required
+
+jdk:
+- oraclejdk8
+
+after_success:
+# push application image to docker registry
+- if [ "$TRAVIS_BRANCH" == "master" ]; then
+  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  docker push agrcom/posessor-settelment-generator:latest;
+    fi
+
+# support for docker
+services:
+- docker

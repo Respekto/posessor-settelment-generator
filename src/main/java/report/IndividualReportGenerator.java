@@ -1,49 +1,41 @@
 package report;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import model.IndividualReport;
+import lombok.NoArgsConstructor;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
+@NoArgsConstructor
 public class IndividualReportGenerator {
 
-    private IndividualReport individualReport;
+    public void createReportDocument() throws IOException {
+        XWPFDocument document = new XWPFDocument();
 
-    public IndividualReportGenerator(IndividualReport individualReport) {
-
-        this.individualReport = individualReport;
-    }
-
-    public ByteArrayOutputStream generatePdf() throws DocumentException {
+        XWPFParagraph title = document.createParagraph();
 
 
-        // IE workaround: write into byte array first.
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        title.setAlignment(ParagraphAlignment.CENTER);
 
-        Document document = new Document();
-        PdfWriter.getInstance(document, baos);
+        XWPFRun titleRun = title.createRun();
+        titleRun.setText("Rozliczenie zaliczki eksploatacyjnej");
+        titleRun.setColor("009933");
+        titleRun.setBold(true);
+        titleRun.setFontFamily("Courier");
+        titleRun.setFontSize(20);
 
-        document.open();
-
-        document.open();
-        Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, 16, BaseColor.BLACK);
-        Chunk chunk = new Chunk("Rozliczenie zaliczki eksploatacyjnej", font);
-
-        document.add(chunk);
+        FileOutputStream out = new FileOutputStream(new File("createdocument.docx"));
+        document.write(out);
+        out.close();
         document.close();
 
-        PdfPTable table = new PdfPTable(3);
-        //addTableHeader(table);
-//        addRows(table);
-//        addCustomRows(table);
 
-        document.add(table);
-        document.close();
-
-        return baos;
     }
 
+    //dotyczącej
+    //kosztów zarządzania nieruchomością wspólną za rok 2017
 }
